@@ -6,6 +6,7 @@ import router from './router'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import { store } from './store'
+import * as firebase from 'firebase'
 
 Vue.use(Vuetify)
 
@@ -17,5 +18,14 @@ new Vue({
   router,
   store,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  created () {
+    firebase.initializeApp({
+      apiKey: 'AIzaSyAueszhVJ7ykogbChr5OVeFFt58Znm04JU',
+      authDomain: 'thinking-planting.firebaseapp.com',
+      databaseURL: 'https://thinking-planting.firebaseio.com',
+      projectId: 'thinking-planting',
+      storageBucket: 'thinking-planting.appspot.com'
+    })
+  }
 })
