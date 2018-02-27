@@ -92,13 +92,7 @@
    methods: {
      onCreateThinkPlant () {
        if (!this.formIsValid) {
-         return
-       }
-       const thinkPlantData = {
-         title: this.title,
-         content: this.content,
-         ispublic: this.ispublic,
-         tag: this.tag
+        // return
        }
      }
    }

@@ -28,7 +28,7 @@ export default new Router({
       component: CreateThinkPlant
     },
     {
-      path: 'thinkplants/:id',
+      path: '/thinkplants/:id',
       name: 'ThinkPlant',
       props: true,
       component: ThinkPlant
