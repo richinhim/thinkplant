@@ -80,8 +80,8 @@
     methods: {
       onSignup () {
         // Vuex
-        console.log({email: this.email, password: this.password, confirmPassword: this.confirmPassword})
-        // this.$store.dispatch('signUserUp', {email: this.email, password: this.password})
+        // console.log({email: this.email, password: this.password, confirmPassword: this.confirmPassword})
+        this.$store.dispatch('signUserUp', {email: this.email, password: this.password})
       }
     }
   }

@@ -36,13 +36,25 @@
 export default {
   data () {
     return {
-      sideNav: false,
-      menuItems: [
-        {icon: 'view_agenda', title: 'Create think', link: '/thinkplant/new'},
-        {icon: 'view_list', title: 'Planting Thinks', link: '/thinkplants'},
-        {icon: 'face', title: 'Sign up', link: '/signup'},
-        {icon: 'lock_open', title: 'Sign in', link: 'signin'}
+      sideNav: false
+    }
+  },
+  computed: {
+    menuItems () {
+      let menuItems = [
+          {icon: 'face', title: 'Sign up', link: '/signup'},
+          {icon: 'lock_open', title: 'Sign in', link: '/signin'}
       ]
+      if (this.userIsAuthenticated) {
+        menuItems = [
+          {icon: 'view_agenda', title: 'Create think', link: '/thinkplant/new'},
+          {icon: 'view_list', title: 'Planting Thinks', link: '/thinkplants'}
+        ]
+      }
+      return menuItems
+    },
+    userIsAuthenticated () {
+      return this.$store.getters.user !== null && this.$store.getters.user !== undefined
     }
   },
   name: 'App'

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import * as firebase from 'firebase'
 
 Vue.use(Vuex)
 export const store = new Vuex.Store({
@@ -18,29 +19,61 @@ export const store = new Vuex.Store({
         content: 'WebRTC를 통한 음성/영상통화 ',
         ispublic: true,
         tag: 'WebRTC'
-      },
-      {
-        id: '234dkdkd111',
-        title: 'AI',
-        content: 'AI ',
-        ispublic: true,
-        tag: 'AI'
       }
-      ,
-      {
-        id: '234dkdkd111',
-        title: 'AI',
-        content: 'AI ',
-        ispublic: true,
-        tag: 'AI'
-      }
-    ]
+    ],
+    user: null
   },
   mutations: {
-
+    createMeetup (state, payload) {
+      state.loadedMeetups.push(payload)
+    },
+    setUser (state, payload) {
+      state.user = payload
+    }
   },
   actions: {
-
+    signUserUp ({commit}, payload) {
+      firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+        .then(
+          user => {
+            const newUser = {
+              id: user.uid,
+              registeredMeetups: []
+            }
+            commit('setUser', newUser)
+          }
+        )
+        .catch(
+          error => {
+            console.log(error)
+          }
+        )
+    },
+    signUserIn ({commit}, payload) {
+      commit('setLoading', true)
+      commit('clearError')
+      firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+        .then(
+          user => {
+            commit('setLoading', false)
+            const newUser = {
+              id: user.uid,
+              registeredMeetups: []
+            }
+            commit('setUser', newUser)
+          }
+        )
+        .catch(
+          error => {
+            commit('setLoading', false)
+            commit('setError', error)
+            console.log(error)
+          }
+        )
+    },
+    clearError ({commit}) {
+      commit('clearError')
+    }
   },
   getters: {
     loadedThinkPlants (state) {
@@ -60,6 +93,9 @@ export const store = new Vuex.Store({
           return thinkplant.id === thinkplantId
         })
       }
+    },
+    user (state) {
+      return state.user
     }
   }
 })
