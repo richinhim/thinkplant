@@ -1,35 +1,52 @@
 <template>
-  <v-container>
-    <v-layout row wrap v-for="thinkplant in thinkplants" :key="thinkplant.id" class="mb-2">
-      <v-flex xs12 sm10 md8 offset-sm1 offset-md2>
-        <v-card class="info">
-          <v-container fluid>
-            <v-layout row>
-              <v-flex xs5 sm4 md3>
-              </v-flex>
-              <v-flex xs7 sm8 md9>
-                <v-card-title primary-title>
-                  <div>
-                    <h5 class="white--text mb-0">{{ thinkplant.title }}</h5>
-                    <div>{{ thinkplant.content}}</div>
-                  </div>
-                </v-card-title>
-                <v-card-actions>
-                  <v-btn flat :to="'/thinkplants/' + thinkplant.id">
-                    <v-icon left light>arrow_forward</v-icon>
-                    View ThinkPlant
-                  </v-btn>
-                </v-card-actions>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <v-card>
+    <v-card-title>
+      ThinkPlants
+      <v-spacer></v-spacer>
+      <v-text-field
+        append-icon="search"
+        label="Search"
+        single-line
+        hide-details
+        v-model="search"
+      ></v-text-field>
+    </v-card-title>
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      :search="search"
+    >
+      <template slot="items" slot-scope="props">
+        <td>{{ props.item.title }}</td>
+        <td class="text-xs-left">{{ props.item.content }}</td>
+        <td class="text-xs-left">{{ props.item.ispublic }}</td>
+        <td class="text-xs-left">{{ props.item.tag }}</td>
+      </template>
+      <v-alert slot="no-results" :value="true" color="error" icon="warning">
+        Your search for "{{ search }}" found no results.
+      </v-alert>
+    </v-data-table>
+  </v-card>
 </template>
 <script>
   export default {
+    data () {
+      return {
+        search: '',
+        headers: [
+          {
+            text: 'Title',
+            align: 'left',
+            sortable: false,
+            value: 'title'
+          },
+          { text: 'Content', value: 'content' },
+          { text: 'IsPublic', value: 'ispublic' },
+          { text: 'Tag', value: 'tag' }
+        ],
+        items: this.$store.getters.loadedThinkPlants
+      }
+    },
     computed: {
       thinkplants () {
         console.log('ThinkPlants => thinkplants')

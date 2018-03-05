@@ -1,48 +1,57 @@
 <template>
-  <v-container>
-    <v-layout row wrap class="mt-2">
-      <v-flex xs12>
-        <v-carousel style="cursor: pointer;">
-         <v-carousel-item
-          v-for="(thinkplant,i) in thinkplants"
-          :key="thinkplant.id"
-          v-on:click.native="onLoadThinkPlant(thinkplant.id)">
-          <div class="title">
-              {{ thinkplant.content }}
-          </div>
-        </v-carousel-item>
-       </v-carousel>
-      </v-flex>
-    </v-layout>
-    <v-layout row wrap class="mt-2">
-      <v-flex xs12 class="text-xs-center">
-        <p>Create Think Planting</p>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <v-card>
+    <v-card-title>
+      ThinkPlants
+      <v-spacer></v-spacer>
+      <v-text-field
+        append-icon="search"
+        label="Search"
+        single-line
+        hide-details
+        v-model="search"
+      ></v-text-field>
+    </v-card-title>
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      :search="search"
+    >
+      <template slot="items" slot-scope="props">
+        <td>{{ props.item.title }}</td>
+        <td class="text-xs-left">{{ props.item.content }}</td>
+        <td class="text-xs-left">{{ props.item.ispublic }}</td>
+        <td class="text-xs-left">{{ props.item.tag }}</td>
+      </template>
+      <v-alert slot="no-results" :value="true" color="error" icon="warning">
+        Your search for "{{ search }}" found no results.
+      </v-alert>
+    </v-data-table>
+  </v-card>
 </template>
 <script>
-export default {
-  computed: {
-    thinkplants () {
-      return this.$store.getters.featuredThinkPlants
-    }
-  },
-  methods: {
-    onLoadThinkPlant (id) {
-      console.log('onLoadThinkPlant=>' + id)
-      this.$router.push('/thinkplants/' + id)
+  export default {
+    data () {
+      return {
+        search: '',
+        headers: [
+          {
+            text: 'Title',
+            align: 'left',
+            sortable: false,
+            value: 'title'
+          },
+          { text: 'Content', value: 'content' },
+          { text: 'IsPublic', value: 'ispublic' },
+          { text: 'Tag', value: 'tag' }
+        ],
+        items: this.$store.getters.loadedThinkPlants
+      }
+    },
+    computed: {
+      thinkplants () {
+        console.log('ThinkPlants => thinkplants')
+        return this.$store.getters.loadedThinkPlants
+      }
     }
   }
-}
 </script>
-<style scoped>
-  .title {
-    position: absolute;
-    bottom: 50px;
-    background-color: rgba(0,0,0,0.5);
-    color: white;
-    font-size: 2em;
-    padding: 20px;
-  }
-</style>

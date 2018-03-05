@@ -18,6 +18,21 @@ export const store = new Vuex.Store({
         content: 'WebRTC를 통한 음성/영상통화 ',
         ispublic: true,
         tag: 'WebRTC'
+      },
+      {
+        id: '234dkdkd111',
+        title: 'AI',
+        content: 'AI ',
+        ispublic: true,
+        tag: 'AI'
+      }
+      ,
+      {
+        id: '234dkdkd111',
+        title: 'AI',
+        content: 'AI ',
+        ispublic: true,
+        tag: 'AI'
       }
     ]
   },
