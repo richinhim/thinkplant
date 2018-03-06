@@ -32,6 +32,20 @@ export const store = new Vuex.Store({
     createThinkPlant (state, payload) {
       state.loadedThinkPlants.push(payload)
     },
+    updateThinkPlant (state, payload) {
+      const thinkplant = state.loadedThinkPlants.find(thinkplant => {
+        return thinkplant.id === payload.id
+      })
+      if (payload.title) {
+        thinkplant.title = payload.title
+      }
+      if (payload.content) {
+        thinkplant.description = payload.content
+      }
+      if (payload.isbublic) {
+        thinkplant.date = payload.isbublic
+      }
+    },
     setUser (state, payload) {
       state.user = payload
     },
@@ -81,9 +95,14 @@ export const store = new Vuex.Store({
         tag: payload.tag,
         creatorId: getters.user.id
       }
+      let key
       firebase.database().ref('thinkplants').push(thinkplant)
         .then((data) => {
-          const key = data.key
+          key = data.key
+          console.log(key)
+          return key
+        })
+        .then(() => {
           commit('createThinkPlant', {
             ...thinkplant,
             id: key
@@ -93,6 +112,29 @@ export const store = new Vuex.Store({
           console.log(error)
         }
       )
+    },
+    updateThinkPlantData ({commit}, payload) {
+      console.log('is:' + payload.id)
+      commit('setLoading', true)
+      const updateObj = {}
+      if (payload.title) {
+        updateObj.title = payload.title
+      }
+      if (payload.content) {
+        updateObj.content = payload.content
+      }
+      if (payload.ispublic) {
+        updateObj.ispublic = payload.ispublic
+      }
+      firebase.database().ref('thinkplants').child(payload.id).update(updateObj)
+        .then(() => {
+          commit('setLoading', false)
+          commit('updateThinkPlant', payload)
+        })
+        .catch(error => {
+          console.log(error)
+          commit('setLoading', false)
+        })
     },
     signUserUp ({commit}, payload) {
       commit('setLoading', true)
