@@ -7,6 +7,7 @@ import CreateThinkPlant from '@/components/thinks/CreateThinkPlant'
 import ThinkPlant from '@/components/thinks/ThinkPlant'
 import SignUp from '@/components/User/SignUp'
 import SignIn from '@/components/User/SignIn'
+import AuthGuard from './auth-guard'
 
 Vue.use(Router)
 
@@ -25,7 +26,8 @@ export default new Router({
     {
       path: '/thinkplant/new',
       name: 'CreateThinkPlant',
-      component: CreateThinkPlant
+      component: CreateThinkPlant,
+      beforeEnter: AuthGuard
     },
     {
       path: '/thinkplants/:id',

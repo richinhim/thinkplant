@@ -51,6 +51,9 @@
       thinkplants () {
         console.log('ThinkPlants => thinkplants')
         return this.$store.getters.loadedThinkPlants
+      },
+      loading () {
+        return this.$store.getters.loading
       }
     }
   }

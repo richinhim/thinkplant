@@ -92,8 +92,16 @@
    methods: {
      onCreateThinkPlant () {
        if (!this.formIsValid) {
-        // return
+         return
        }
+       const thinkplantData = {
+         title: this.title,
+         content: this.content,
+         ispublic: this.ispublic,
+         tag: this.tag
+       }
+       this.$store.dispatch('createThinkPlant', thinkplantData)
+       this.$router.push('/thinkplants')
      }
    }
  }
